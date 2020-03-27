@@ -1,7 +1,19 @@
 #include "hashTable.h"
 #include <iostream>
 #include <cmath>
+#include <string>
 using namespace std;
+
+void hashTable::cleanKey(string* key){
+    for (size_t i = 0; i < key->size(); i++){
+        if (key->at(i) == 0){            //clean leading zeroes
+            key->erase(0, i);
+        }
+        else{                           //on first instance of nonzero return
+            return;
+        }
+    }
+}
 
 void hashTable::collision(int hashIndex, int hashVal){
 
@@ -20,7 +32,6 @@ void hashTable::collision(int hashIndex, int hashVal){
                 //resize table and insert
             }
         }
-        
     }
     
     
@@ -74,7 +85,7 @@ void hashTable::searchTable(){
 
 void hashTable::printTable(){
     for (size_t i = 0; i < tableBuckets.size(); i++){
-        cout << i << ": " << tableBuckets.at(i) << "\t";
+        cout << i+1 << ": " << tableBuckets.at(i) << "\t";
     }
     cout << endl;
 }
@@ -84,6 +95,14 @@ void hashTable::initializeTable(vector<int> initialValues){
     for (size_t i = 0; i < initialValues.size(); i++){
         tableBuckets.push_back(initialValues.at(i));
     }
+}
+
+void hashTable::initializeTable(vector<string> initialStrings){
+    cout << "Initializing table...\n";
+    for (size_t i = 0; i < initialStrings.size(); i++){
+        stringBuckets.push_back(initialStrings.at(i));
+    }
+    
 }
 
 int hashTable::getTableSize(){
@@ -107,7 +126,23 @@ void hashTable::insert(int hashVal){
     }
 
     if (midSquare10){
-        /* code */
+        
+        int R, squaredVal = pow(hashVal, 2), rightDigits, leftDigits;
+        R = ceil(log10(tableBuckets.size()));
+        string key = to_string(squaredVal);
+        rightDigits = ceil((key.size()-R)/2);
+        key.erase(key.size()-rightDigits, rightDigits);
+        leftDigits = key.size()-R;
+        key.erase(0, leftDigits);
+
+        if (tableBuckets.at(stoi(key)) != 0){
+             collision(stoi(key), hashVal);
+        }
+        else{
+            tableBuckets.at(stoi(key)) = hashVal;
+            cout << "Value: " << hashVal << " inserted into index " << key << " of " << getTableSize() << endl;
+        }
+        
     }
  
     if (midSquare2){
