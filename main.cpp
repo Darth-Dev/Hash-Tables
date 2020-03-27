@@ -18,7 +18,7 @@ int main(){
 
     hashTable table(hashChoice, collisionChoice);
     table.printConfiguration();
-     
+    table.initializeTable(initialValues);
     cout << "Enter integer values separated by a space to populate the hash table, enter -1 to exit: ";
     while (cin >> hashValue){
 
@@ -26,39 +26,39 @@ int main(){
             break;
         }
         
-        initialValues.push_back(hashValue); 
-        cout << initialValues[it] << " " << it <<endl;
-        it++;
+        table.insert(hashValue); 
     }
-    table.initializeTable(initialValues);
+    //table.initializeTable(initialValues);
 
     do{
         cout << "Enter a number 1-4 to perform an action. Press 0 to exit.\n" << "0: Exit\n 1: Insert\n 2. Search\n 3. Delete\n 4. Print\n";
         cin >> choice;
         switch (choice){
         
-        case 0:
-            return 0;
-            break;
+            case 0:
+                return 0;
+                break;
 
-        case 1:
+            case 1:
+                cout << "Enter a value to insert into the hash table.\n";
+                cin >> hashValue; 
+                table.insert(hashValue);
+                break;
+
+            case 2:
+                table.searchTable();
+                break;
+
+            case 3:
+                table.deleteBucket();
+                break;
             
-            break;
-
-        case 2:
-            table.searchTable();
-            break;
-
-        case 3:
-            table.deleteBucket();
-            break;
-        
-        case 4:
-            table.printTable();
-            break;    
-        
-        default:
-            break;
+            case 4:
+                table.printTable();
+                break;    
+            
+            default:
+                break;
         }
     }while(choice != 0);
 

@@ -1,6 +1,45 @@
 #include "hashTable.h"
 #include <iostream>
+#include <cmath>
 using namespace std;
+
+void hashTable::collision(int hashIndex, int hashVal){
+
+    if (chaining){
+        /* code */
+    }
+
+    if (linearProbing){
+        for (int i = hashIndex; i < tableBuckets.size(); i++){
+            if (tableBuckets.at(i) == 0){
+                tableBuckets.at(i) = hashVal;
+                cout << "Collision resolved.\n";
+                break;
+            }
+            else if(tableBuckets.at(i) != 0 && tableBuckets.at(i) == tableBuckets.size()){
+                //resize table and insert
+            }
+        }
+        
+    }
+    
+    
+}
+
+int hashTable::stringHash(){
+    const int constVal = 2;
+    int hashVal=0;
+
+    for (size_t i = 0; i < tableBuckets.size(); i++){
+        hashVal = hashVal + (pow(constVal, i) * static_cast<int>(tableBuckets[i]));
+    }
+
+    return hashVal;
+}
+
+int hashTable::modHash(int* value){
+    return *value % getTableSize();
+}
 
 void hashTable::deleteBucket(){
     int deleteValue;
@@ -9,10 +48,10 @@ void hashTable::deleteBucket(){
 
     for (size_t i = 0; i < tableBuckets.size(); i++){
         if (tableBuckets.at(i) == deleteValue){
-            tableBuckets.at(i) == -1;
+            tableBuckets.at(i) = 0;
             cout << "Deleted value " << deleteValue << " from bucket #" << i << endl;
         }
-        else{
+        else if(tableBuckets.at(i) != deleteValue && i == tableBuckets.size()){
             cout << "Value to delete was no found.\n";
         }
     }
@@ -27,7 +66,7 @@ void hashTable::searchTable(){
         if (tableBuckets.at(i) == searchValue){
             cout << "Search found " << searchValue << " in bucket #" << i << endl;
         }
-        else{
+        else if(tableBuckets.at(i) != searchValue && i == tableBuckets.size()){
             cout << "Search found no results.\n";
         }
     }
@@ -35,18 +74,16 @@ void hashTable::searchTable(){
 
 void hashTable::printTable(){
     for (size_t i = 0; i < tableBuckets.size(); i++){
-        cout << i << ": " << tableBuckets.at(i) << endl;
+        cout << i << ": " << tableBuckets.at(i) << "\t";
     }
+    cout << endl;
 }
 
 void hashTable::initializeTable(vector<int> initialValues){
-    cout << "initializing table...\n";
+    cout << "Initializing table...\n";
     for (size_t i = 0; i < initialValues.size(); i++){
         tableBuckets.push_back(initialValues.at(i));
-        cout << initialValues.at(i) << " - " << tableBuckets.at(i) << endl;
     }
-    cout << endl;
-    
 }
 
 int hashTable::getTableSize(){
@@ -54,12 +91,34 @@ int hashTable::getTableSize(){
 }
 
 void hashTable::insert(int hashVal){
-    int hashIndex = hashVal % getTableSize();
-    cout << hashIndex << endl;
+
     if (modulo){
-        cout << "Value: " << hashVal << " inserted into index " << hashIndex << " of " << getTableSize() << endl;
-        tableBuckets.at(hashIndex) = hashVal;                   
+
+        int hashIndex;
+        hashIndex = modHash(&hashVal);
+
+        if(tableBuckets.at(hashIndex) != 0){
+            collision(hashIndex, hashVal);
+        }
+        else{
+            tableBuckets.at(hashIndex) = hashVal;
+            cout << "Value: " << hashVal << " inserted into index " << hashIndex << " of " << getTableSize() << endl;
+        }
     }
+
+    if (midSquare10){
+        /* code */
+    }
+ 
+    if (midSquare2){
+        /* code */
+    }
+    
+    
+    if (stringHashing){
+        /* code */
+    }
+    
     
 }
 

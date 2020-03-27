@@ -7,6 +7,9 @@ class hashTable{
         std::vector<int> tableBuckets;
 
     public:
+        void collision(int,int);
+        int stringHash();
+        int modHash(int*);
         void deleteBucket();
         void searchTable();
         void printTable();
