@@ -1,5 +1,6 @@
 #include <vector>
 #include <string>
+#include "bucket.h"
 class hashTable{
 
     private:
@@ -7,6 +8,7 @@ class hashTable{
         bool chaining, linearProbing, quadraticProbing, doubleHashing;
         std::vector<int> tableBuckets;
         std::vector<std::string> stringBuckets;
+        bucket* head;
 
     public:
         void cleanKey(std::string*);
@@ -18,6 +20,7 @@ class hashTable{
         void printTable();
         void initializeTable(std::vector<int>);
         void initializeTable(std::vector<std::string>);
+        void initializeTable(std::vector<bucket>);
         int getTableSize();
         void insert(int);
         void printConfiguration();

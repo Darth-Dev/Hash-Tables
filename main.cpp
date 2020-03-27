@@ -21,22 +21,37 @@ int main(){
     hashTable table(hashChoice, collisionChoice);
     table.printConfiguration();
 
-    if (hashChoice == 1 || hashChoice == 2 || hashChoice == 3 || hashChoice == 4){
+    if (collisionChoice == 1){      //if chaining
+        cout << "Enter integer values separated by a space to populate the hash table, enter -1 to exit: ";
+            while (cin >> hashValue){
+
+                if (hashValue == -1){
+                    break;
+                }
+                bucket* newBucket = new bucket(hashValue);
+                table.insert(hashValue);
+            }
+    }
+    
+
+    if (collisionChoice =! 1){          //not chaining
         table.initializeTable(initialInts);
     }
     
-    if (hashChoice == 4){
+    if (hashChoice == 4){           //if string hashing
             table.initializeTable(initialStrings);
     }
     
-    
-    cout << "Enter integer values separated by a space to populate the hash table, enter -1 to exit: ";
-    while (cin >> hashValue){
+    if (collisionChoice != 1 || hashChoice == 4)        //if not chaining or string hashing
+    {
+        cout << "Enter integer values separated by a space to populate the hash table, enter -1 to exit: ";
+            while (cin >> hashValue){
 
-        if (hashValue == -1){
-            break;
-        }
-        table.insert(hashValue); 
+            if (hashValue == -1){
+                break;
+            }
+            table.insert(hashValue); 
+    }
     }
 
     do{

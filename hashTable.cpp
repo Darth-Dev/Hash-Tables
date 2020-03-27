@@ -17,9 +17,9 @@ void hashTable::cleanKey(string* key){
 
 void hashTable::collision(int hashIndex, int hashVal){
 
-    if (chaining){
-        /* code */
-    }
+    //if (chaining){
+       // bucket* newBucket = new bucket(hashIndex, );
+    //}
 
     if (linearProbing){
         for (int i = hashIndex; i < tableBuckets.size(); i++){
@@ -32,6 +32,24 @@ void hashTable::collision(int hashIndex, int hashVal){
                 //resize table and insert
             }
         }
+    }
+
+    if(quadraticProbing){
+        int probeCnt;
+
+        while (probeCnt < tableBuckets.size()){
+            if (tableBuckets.at(probeCnt) == 0){
+                tableBuckets.at(probeCnt) = hashVal;
+                cout << "Collision resolved.\n";
+                break;
+            }
+            probeCnt++;
+            hashIndex = (hashIndex + probeCnt*probeCnt);    //Index = Index + i * i
+        }
+    }
+
+    if(doubleHashing){
+
     }
     
     
@@ -105,11 +123,28 @@ void hashTable::initializeTable(vector<string> initialStrings){
     
 }
 
+void hashTable::initializeTable(vector<bucket> initialBuckets){
+    for (size_t i = 0; i < initialBuckets.size(); i++){
+        
+    }
+    
+}
+
 int hashTable::getTableSize(){
     return tableBuckets.size();
 }
 
 void hashTable::insert(int hashVal){
+    int hashIndex;
+
+    if(chaining){
+        if (modulo){
+            hashIndex = modHash(&hashVal);
+            bucket newBucket = bucket(hashIndex);
+        }
+        
+        return;
+    }
 
     if (modulo){
 
@@ -126,7 +161,7 @@ void hashTable::insert(int hashVal){
     }
 
     if (midSquare10){
-        
+
         int R, squaredVal = pow(hashVal, 2), rightDigits, leftDigits;
         R = ceil(log10(tableBuckets.size()));
         string key = to_string(squaredVal);
@@ -146,16 +181,25 @@ void hashTable::insert(int hashVal){
     }
  
     if (midSquare2){
-        /* code */
+        int R, squaredVal = pow(hashVal, 2), rightDigits, leftDigits;
+        R = ceil(log2(tableBuckets.size()));
+        string key = to_string(squaredVal);
+        rightDigits = ceil((key.size()-R)/2);
+        key.erase(key.size()-rightDigits, rightDigits);
+        leftDigits = key.size()-R;
+        key.erase(0, leftDigits);
+
+        if (tableBuckets.at(stoi(key)) != 0){
+             collision(stoi(key), hashVal);
+        }
+        else{
+            tableBuckets.at(stoi(key)) = hashVal;
+            cout << "Value: " << hashVal << " inserted into index " << key << " of " << getTableSize() << endl;
+        }
     }
-    
-    
-    if (stringHashing){
-        /* code */
-    }
-    
-    
 }
+
+
 
 void hashTable::printConfiguration(){
 
